@@ -1,27 +1,34 @@
-import axios from 'axios'
-import React from 'react'
-import { useState } from 'react'
+ /* import axios from "axios";
+import React, { useState } from "react";
 
 // önerilen başlangıç stateleri
-const initialMessage = ''
-const initialEmail = ''
-const initialSteps = 0
-const initialIndex = 4 //  "B" nin bulunduğu indexi
+const initialMessage = "";
+const initialEmail = "";
+const initialSteps = 0;
+const initialIndex = 4; //  "B" nin bulunduğu indexi
 
 export default function AppFunctional(props) {
   // AŞAĞIDAKİ HELPERLAR SADECE ÖNERİDİR.
   // Bunları silip kendi mantığınızla sıfırdan geliştirebilirsiniz.
- const [degisenIndex, setDegisenIndex] = useState(initialIndex);
- const [counter, setCounter] = useState(initialSteps);
- const [email, setEmail] = useState(initialEmail);
- const [errorMessage, setErrorMessage] = useState(initialMessage);
 
- const postObject = {
-  email: email,
-  x:(degisenIndex + 1) % 3 == 0 ? 3 : (degisenIndex + 1) % 3,
-  y:degisenIndex < 3 ? 1 : degisenIndex < 6 ? 2 : degisenIndex < 9 ? 3 : false,
-  steps: counter, 
- };
+  const [degisenIndex, setDegisenIndex] = useState(initialIndex);
+  const [counter, setCounter] = useState(initialSteps);
+  const [email, setEmail] = useState(initialEmail);
+  const [errorMessage, setErrorMessage] = useState(initialMessage);
+
+  const postObject = {
+    email: email,
+    x: (degisenIndex + 1) % 3 == 0 ? 3 : (degisenIndex + 1) % 3,
+    y:
+      degisenIndex < 3
+        ? 1
+        : degisenIndex < 6
+        ? 2
+        : degisenIndex < 9
+        ? 3
+        : false,
+    steps: counter,
+  };
 
   function getXY() {
     // Koordinatları izlemek için bir state e sahip olmak gerekli değildir.
@@ -36,69 +43,74 @@ export default function AppFunctional(props) {
     return xyArray[degisenIndex];
   }
 
-/*
   function getXYMesaj() {
     // Kullanıcı için "Koordinatlar (2, 2)" mesajını izlemek için bir state'in olması gerekli değildir.
     // Koordinatları almak için yukarıdaki "getXY" helperını ve ardından "getXYMesaj"ı kullanabilirsiniz.
-    // tamamen oluşturulmuş stringi döndürür.
-
-    // let messageKordinat = Koordinatlar ${getXY};
-    // let messageMove = ${counter};
-   //  let return (messageKordinat, messageMove)
-
-  } */
+    // tamamen oluşturulmuş stringi döndürür.i
+    // let messageKordinat = `Koordinatlar ${getXY()}`
+    // let messageMove = `${counter} kez ilerlediniz.`
+    // return (messageKordinat, messageMove)
+  }
 
   function reset() {
-
+    // Tüm stateleri başlangıç ​​değerlerine sıfırlamak için bu helperı kullanın.
 
     setCounter(0);
     setDegisenIndex(initialIndex);
     setErrorMessage("");
     setEmail("");
+    /*
+    TODO
+    Mail için tekrar dön.
+    
+    */
   }
-
+/*
   function sonrakiIndex(yon) {
     // Bu helper bir yön ("sol", "yukarı", vb.) alır ve "B" nin bir sonraki indeksinin ne olduğunu hesaplar.
     // Gridin kenarına ulaşıldığında başka gidecek yer olmadığı için,
     // şu anki indeksi değiştirmemeli.
+
     if (
-      yon === "left" &&  (degisenIndex == 1 ||
+      yon === "left" &&
+      (degisenIndex == 1 ||
         degisenIndex == 2 ||
         degisenIndex == 4 ||
         degisenIndex == 5 ||
         degisenIndex == 7 ||
-        degisenIndex == 8)  // (1 <= degisenIndex <3 || 4 <= degisenIndex < 6 || 7 <= degisenIndex < 9)
-    ){ //  (1 <= degisenIndex <3 || 4 <= degisenIndex < 6 || 7 <= degisenIndex < 9) 
+        degisenIndex == 8)
+    ) {
       setDegisenIndex(degisenIndex - 1);
-      setCounter(counter +1);
+      setCounter(counter + 1);
       setErrorMessage("");
     } else if (yon === "left") {
-      setErrorMessage("Sola gidemezsiniz"); 
+      setErrorMessage("Sola gidemezsiniz");
     }
 
     if (
-      yon === "right" &&  (degisenIndex == 0 ||
+      yon === "right" &&
+      (degisenIndex == 0 ||
         degisenIndex == 1 ||
         degisenIndex == 3 ||
         degisenIndex == 4 ||
         degisenIndex == 6 ||
-        degisenIndex == 7) // (0 <= degisenIndex < 2 || 3 <= degisenIndex < 5 || 6 <= degisenIndex < 8 )
-    )  {
+        degisenIndex == 7)
+    ) {
       setDegisenIndex(degisenIndex + 1);
-      setCounter(counter +1);
+      setCounter(counter + 1);
       setErrorMessage("");
     } else if (yon === "right") {
       setErrorMessage("Sağa gidemezsiniz");
     }
-   
 
     if (
-      yon === "up" &&  (degisenIndex == 3 ||
+      yon === "up" &&
+      (degisenIndex == 3 ||
         degisenIndex == 4 ||
         degisenIndex == 5 ||
         degisenIndex == 6 ||
         degisenIndex == 7 ||
-        degisenIndex == 8)    // (3 <= degisenIndex < 9)
+        degisenIndex == 8)
     ) {
       setDegisenIndex(degisenIndex - 3);
       setCounter(counter + 1);
@@ -107,22 +119,14 @@ export default function AppFunctional(props) {
       setErrorMessage("Yukarıya gidemezsiniz");
     }
 
-      if (yon === "down" && degisenIndex < 6) {
+    if (yon === "down" && degisenIndex < 6) {
       setDegisenIndex(degisenIndex + 3);
       setCounter(counter + 1);
       setErrorMessage("");
     } else if (yon === "down") {
       setErrorMessage("Aşağıya gidemezsiniz");
     }
-
-    
   }
-
-/*
-  function ilerle(evt) {
-    // Bu event handler, "B" için yeni bir dizin elde etmek üzere yukarıdaki yardımcıyı kullanabilir,
-    // ve buna göre state i değiştirir.
-  } */
 
   function onChange(evt) {
     // inputun değerini güncellemek için bunu kullanabilirsiniz
@@ -131,6 +135,7 @@ export default function AppFunctional(props) {
 
   function onSubmit(evt) {
     // payloadu POST etmek için bir submit handlera da ihtiyacınız var.
+
     evt.preventDefault();
     axios
       .post("http://localhost:9000/api/result", postObject)
@@ -189,8 +194,8 @@ export default function AppFunctional(props) {
           type="email"
           placeholder="email girin"
         ></input>
-        <input id="submit" type="submit" onClick={onSubmit}></input>
+        <input onClick={onSubmit} id="submit" type="submit"></input>
       </form>
     </div>
   );
-}
+} */
